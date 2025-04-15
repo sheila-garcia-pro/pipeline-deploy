@@ -64,9 +64,15 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: global-scripts
 
+      # 7. Instala dependências do script global
+      - name: Install global script dependencies
+        run: npm install
+        working-directory: ./global-scripts
+
       # 7. Executa o script de deploy do repositório global
       - name: Run Square Cloud deployment
         run: node global-scripts/src/square-deploy.mjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
+        working-directory: ./global-scripts 
