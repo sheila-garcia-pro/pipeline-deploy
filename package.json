@@ -3,12 +3,12 @@
     "version": "1.0.0",
     "type": "commonjs",
     "dependencies": {
-      "@squarecloud/api": "^1.0.0"
+      "@squarecloud/api": "^1.3.1"
     },
     "engines": {
       "node": ">=22.0.0"
     },
     "scripts": {
-      "start": "node src/square-deploy.cjs"
+      "test": "node -e \"require('@squarecloud/api'); console.log('Pacote carregado com sucesso')\""
     }
   }
