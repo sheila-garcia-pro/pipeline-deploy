@@ -78,7 +78,7 @@ jobs:
 
       # 7. Executa o deploy
       - name: Run Square Cloud deployment
-        run:  node $GITHUB_WORKSPACE/global-scripts/src/square-deploy.js
+        run:  node $GITHUB_WORKSPACE/global-scripts/src/square-deploy.cjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
