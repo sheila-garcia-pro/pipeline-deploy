@@ -1,59 +1,53 @@
 #!/usr/bin/env node
-// Correção da importação para CommonJS
-import pkg from '@squarecloud/api';
-const { SquareCloudAPI } = pkg;
+import squareCloud from '@squarecloud/api';
+const { SquareCloudAPI } = squareCloud;
 
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import fs from 'node:fs/promises';
 
-console.log('Iniciando deploy na Square Cloud...');
+console.log('[1/6] Iniciando processo de deploy...');
 
 async function deploy() {
   try {
-    // Verifica variáveis de ambiente
+    // Verificação das variáveis de ambiente
     if (!process.env.SQUARE_API_KEY || !process.env.API_ID_KEY) {
-      throw new Error('Variáveis SQUARE_API_KEY e API_ID_KEY são obrigatórias');
+      throw new Error('Variáveis de ambiente não configuradas');
     }
 
-    const token = process.env.SQUARE_API_KEY;
-    const api_id = process.env.API_ID_KEY;
+    console.log('[2/6] Conectando à Square Cloud API...');
+    const api = new SquareCloudAPI(process.env.SQUARE_API_KEY);
     
-    console.log('Conectando à API...');
-    const api = new SquareCloudAPI(token);
-    const app = await api.applications.get(api_id);
+    console.log('[3/6] Obtendo aplicação...');
+    const app = await api.applications.get(process.env.API_ID_KEY);
 
-    console.log('Parando aplicação...');
+    console.log('[4/6] Parando aplicação...');
     const stopped = await app.stop();
+    if (!stopped) throw new Error('Falha ao parar a aplicação');
 
+    // Preparação do arquivo
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    const fileName = 'app.zip';
-    const filePath = join(__dirname, fileName);
+    const zipPath = join(__dirname, 'app.zip');
 
-    console.log(`Verificando arquivo ${filePath}...`);
+    console.log('[5/6] Verificando arquivo app.zip...');
     try {
-      await fs.access(filePath, fs.constants.R_OK);
+      await fs.access(zipPath);
     } catch {
-      throw new Error(`Arquivo ${fileName} não encontrado ou não pode ser lido`);
+      throw new Error(`Arquivo app.zip não encontrado em ${zipPath}`);
     }
 
-    if (stopped) {
-      console.log('Enviando nova versão...');
-      const success = await app.commit(filePath, fileName);
+    console.log('[6/6] Realizando upload...');
+    const success = await app.commit(zipPath, 'app.zip');
+    if (!success) throw new Error('Upload falhou');
 
-      if (success) {
-        console.log('Iniciando aplicação...');
-        const started = await app.start();
-        console.log('Deploy concluído com sucesso!', { started });
-        return true;
-      }
-      throw new Error('Falha no upload');
-    }
-    throw new Error('Aplicação não foi parada corretamente');
+    console.log('✅ Deploy realizado com sucesso!');
+    console.log('Reiniciando aplicação...');
+    await app.start();
+    
   } catch (error) {
-    console.error('Erro no deploy:', error.message);
+    console.error('❌ Erro durante o deploy:', error.message);
     process.exit(1);
   }
 }
