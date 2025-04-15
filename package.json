@@ -1,15 +1,14 @@
 {
     "name": "square-cloud-deployer",
     "version": "1.0.0",
-    "type": "module",
+    "type": "commonjs",
     "dependencies": {
-      "@squarecloud/api": "^1.0.0",
-      "dotenv": "^16.0.0"
+      "@squarecloud/api": "^1.0.0"
     },
     "engines": {
       "node": ">=22.0.0"
     },
     "scripts": {
-      "start": "node src/square-deploy.js"
+      "start": "node src/square-deploy.cjs"
     }
   }
