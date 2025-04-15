@@ -3,28 +3,34 @@ name: Build and Upload to SquareCloud
 on:
   workflow_call:
     secrets:
-      TOKEN_SQUARE_CLOUD:
+      SQUARE_API_KEY:
+        description: "Square Cloud API Key"
         required: true
-        description: "Your SquareCloud API key (store as a secret)"
-      API_ID:
+      API_ID_KEY:
+        description: "Square Cloud App ID"
         required: true
-        description: "The ID of your SquareCloud application"
+      GITHUB_TOKEN:
+        description: "Token para checkout"
+        required: false
 
 jobs:
-  build-and-upload:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN || github.token }}
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./
 
       - name: Build project
         run: npm run build
@@ -39,9 +45,8 @@ jobs:
           zip -r ../app.zip .
           cd ..
 
-      - name: Run script deploy in squarecloud
-        uses: sheila-garcia-pro/pipeline-deploy/.github/actions/deploy@main
+      - name: Run Square Cloud deployment
+        run: node src/square-deploy.mjs
         env:
-          TOKEN_SQUARE_CLOUD: ${{ secrets.TOKEN_SQUARE_CLOUD }}
-          API_ID: ${{ secrets.API_ID }}
-          zip_file_name: app.zip
+          SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
+          API_ID_KEY: ${{ secrets.API_ID_KEY }}
