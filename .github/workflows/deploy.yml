@@ -29,7 +29,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'false'
+
+      - name: Create dummy lock file
+        run: echo "{}" > package-lock.json
+        working-directory: ./caller-repo
 
       # 3. Instala dependências do chamador
       - name: Install dependencies
