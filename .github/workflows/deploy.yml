@@ -84,13 +84,26 @@ jobs:
           npm install
           echo "2. Testando importação do pacote..."
           npm run test
-          echo "3. Verificando estrutura de arquivos..."
-          ls -la
-          ls -la src/ 
-          echo "4. Verificando app.zip..."
+          echo "3. Procurando app.zip..."
+          find . -name "app.zip" -exec ls -lh {} \; 
+          echo "4. Copiando app.zip para o diretório correto..."
+          # Tenta encontrar o arquivo em vários locais possíveis
+          if [ -f ../app.zip ]; then
+          cp ../app.zip src/
+          elif [ -f app.zip ]; then
+          cp app.zip src/
+          elif [ -f $GITHUB_WORKSPACE/app.zip ]; then
+          cp $GITHUB_WORKSPACE/app.zip src/
+          else
+          echo "❌ ERRO: app.zip não encontrado em nenhum local"
+          exit 1
+          fi
+          echo "5. Verificando cópia..."
+          ls -la src/app.zip
+          echo "6. Verificando app.zip..."
           [ -f app.zip ] && echo "app.zip encontrado" || echo "ERRO: app.zip não encontrado"
           unzip -l app.zip || echo "Não foi possível ler app.zip"
-          echo "5. Executando deploy..."
+          echo "7. Executando deploy..."
           node src/square-deploy.cjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
