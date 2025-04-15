@@ -1,9 +1,12 @@
 name: Build and Upload to SquareCloud
 
 on:
-  push:
-    branches:
-      - main
+   workflow_call:
+    secrets:
+      SQUARE_API_KEY:
+        required: true
+      API_ID_KEY:
+        required: true
 
 jobs:
   build-and-upload:
@@ -39,6 +42,6 @@ jobs:
         
       - name: Run script deploy in squarecloud
         env:
-          SQUARE_API_KEY: ${{ secrets.TOKEN_SQUARE_CLOUD }}
-          APP_ID_KEY: ${{ secrets.APP_ID }}
+          SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
+          API_ID_KEY: ${{ secrets.API_ID_KEY }}
         run: node commit-to-square.js
