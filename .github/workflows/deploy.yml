@@ -1,12 +1,20 @@
 name: Build and Upload to SquareCloud
 
 on:
-   workflow_call:
-    secrets:
-      SQUARE_API_KEY:
+  workflow_call:
+    inputs:
+      square_api_key:
         required: true
-      API_ID_KEY:
+        type: string
+        description: "Your SquareCloud API key (store as a secret)"
+      api_id_key:
         required: true
+        type: string
+        description: "The ID of your SquareCloud application"
+      zip_file:
+        required: true
+        type: string
+        description: "The name of the ZIP file to upload"
 
 jobs:
   build-and-upload:
@@ -29,19 +37,17 @@ jobs:
 
       - name: Prepare zip
         run: |
-            mkdir deploy
-            cp package.json deploy/
-            cp squarecloud.config deploy/
-            cp -r dist deploy/
-            cd deploy
-            zip -r ../app.zip .
-            cd ..
+          mkdir deploy
+          cp package.json deploy/
+          cp squarecloud.config deploy/
+          cp -r dist deploy/
+          cd deploy
+          zip -r ../app.zip .
+          cd ..
 
-      - name: Install @squarecloud/api
-        run: npm i @squarecloud/api
-        
       - name: Run script deploy in squarecloud
-        env:
-          SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
-          API_ID_KEY: ${{ secrets.API_ID_KEY }}
-        run: node ./commit-to-square.js
+        uses: ./.github/workflows/actions/deploy
+        with:
+          square_api_key: ${{ inputs.square_api_key }}
+          api_id_key: ${{ inputs.api_id_key }}
+          zip_file_name: app.zip
