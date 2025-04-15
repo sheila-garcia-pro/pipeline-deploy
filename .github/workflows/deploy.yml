@@ -9,7 +9,7 @@ on:
       API_ID_KEY:
         description: "Square Cloud App ID"
         required: true
-      GITHUB_TOKEN:
+      TOKEN:
         description: "Token para checkout do repositório chamador"
         required: true
 
@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: sheila-garcia-pro/pipeline-deploy
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           path: global-scripts
 
       # 7. Executa o script de deploy do repositório global
