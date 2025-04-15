@@ -80,11 +80,17 @@ jobs:
       - name: Run Square Cloud deployment
         run: |
           cd $GITHUB_WORKSPACE/global-scripts
-          echo "Conteúdo do diretório:"
+          echo "1. Verificando instalação..."
+          npm install
+          echo "2. Testando importação do pacote..."
+          npm run test
+          echo "3. Verificando estrutura de arquivos..."
           ls -la
-          echo "Verificando instalação do @squarecloud/api:"
-          npm list @squarecloud/api || npm install @squarecloud/api
-          echo "Executando script..."
+          ls -la src/ 
+          echo "4. Verificando app.zip..."
+          [ -f app.zip ] && echo "app.zip encontrado" || echo "ERRO: app.zip não encontrado"
+          unzip -l app.zip || echo "Não foi possível ler app.zip"
+          echo "5. Executando deploy..."
           node src/square-deploy.cjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
