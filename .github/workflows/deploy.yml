@@ -44,4 +44,4 @@ jobs:
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
-        run: node commit-to-square.js
+        run: node ./commit-to-square.js
