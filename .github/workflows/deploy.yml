@@ -9,7 +9,7 @@ on:
       API_ID_KEY:
         description: "Square Cloud App ID"
         required: true
-      GITHUB_TOKEN:
+      TOKEN:
         description: "Token para checkout do repositório chamador"
         required: true
 
@@ -29,11 +29,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'npm'
+
+      - name: Create dummy lock file
+        run: echo "{}" > package-lock.json
+        working-directory: ./caller-repo
 
       # 3. Instala dependências do chamador
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-package-lock
         working-directory: ./caller-repo
 
       # 4. Build do projeto do chamador
@@ -58,12 +61,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: sheila-garcia-pro/pipeline-deploy
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           path: global-scripts
 
-      # 7. Executa o script de deploy do repositório global
+   # 7. Instala dependências do script global
+      - name: Install global dependencies
+        run: |
+          cd global-scripts
+          npm install @squarecloud/api
+          npm list @squarecloud/api
+        shell: bash
+
+      # 8. Move o ZIP para o diretório global
+      - name: Move ZIP to global directory
+        run: mv app.zip global-scripts/
+
+      # 9. Executa o script de deploy
       - name: Run Square Cloud deployment
-        run: node global-scripts/src/square-deploy.mjs
+        run: |
+          cd global-scripts
+          echo "Current directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la
+          echo "Running deployment script..."
+          node src/square-deploy.mjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
