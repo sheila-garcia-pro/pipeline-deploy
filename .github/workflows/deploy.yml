@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: 'false'
 
       - name: Create dummy lock file
         run: echo "{}" > package-lock.json
