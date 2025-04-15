@@ -10,43 +10,60 @@ on:
         description: "Square Cloud App ID"
         required: true
       GITHUB_TOKEN:
-        description: "Token para checkout"
-        required: false
+        description: "Token para checkout do repositório chamador"
+        required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      # 1. Checkout do repositório CHAMADOR (não do global)
+      - name: Checkout caller repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN || github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: caller-repo
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
+      # 3. Instala dependências do chamador
       - name: Install dependencies
         run: npm install
-        working-directory: ./
+        working-directory: ./caller-repo
 
+      # 4. Build do projeto do chamador
       - name: Build project
         run: npm run build
+        working-directory: ./caller-repo
 
-      - name: Prepare zip
+      # 5. Cria ZIP com os arquivos do chamador
+      - name: Prepare zip from caller
         run: |
+          cd caller-repo
           mkdir deploy
           cp package.json deploy/
           cp squarecloud.config deploy/
           cp -r dist deploy/
           cd deploy
-          zip -r ../app.zip .
-          cd ..
+          zip -r ../../app.zip .
+          cd ../..
 
+      # 6. Checkout do repositório GLOBAL (para pegar o script de deploy)
+      - name: Checkout global repository
+        uses: actions/checkout@v4
+        with:
+          repository: sheila-garcia-pro/pipeline-deploy
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: global-scripts
+
+      # 7. Executa o script de deploy do repositório global
       - name: Run Square Cloud deployment
-        run: node src/square-deploy.mjs
+        run: node global-scripts/src/square-deploy.mjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
