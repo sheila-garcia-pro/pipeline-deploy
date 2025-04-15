@@ -6,7 +6,7 @@ import { dirname } from "path";
 const token = process.env.SQUARE_API_KEY;
 const api_id = process.env.API_ID_KEY;
 const api = new SquareCloudAPI(token);
-const app = await api.applications.get(api_id);
+const app = await api.applications.get("8075952c25f74e918cc365966da4e6d4");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
