@@ -1,0 +1,44 @@
+name: Build and Upload to SquareCloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Prepare zip
+        run: |
+            mkdir deploy
+            cp package.json deploy/
+            cp squarecloud.config deploy/
+            cp -r dist deploy/
+            cd deploy
+            zip -r ../app.zip .
+            cd ..
+
+      - name: Install @squarecloud/api
+        run: npm i @squarecloud/api
+        
+      - name: Run script deploy in squarecloud
+        env:
+          SQUARE_API_KEY: ${{ secrets.TOKEN_SQUARE_CLOUD }}
+          APP_ID_KEY: ${{ secrets.APP_ID }}
+        run: node commit-to-square.js
