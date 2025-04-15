@@ -64,15 +64,27 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: global-scripts
 
-      # 7. Instala dependências do script global
-      - name: Install global script dependencies
-        run: npm install
-        working-directory: ./global-scripts
+   # 7. Instala dependências do script global
+      - name: Install global dependencies
+        run: |
+          cd global-scripts
+          npm install @squarecloud/api
+          npm list @squarecloud/api
+        shell: bash
 
-      # 7. Executa o script de deploy do repositório global
+      # 8. Move o ZIP para o diretório global
+      - name: Move ZIP to global directory
+        run: mv app.zip global-scripts/
+
+      # 9. Executa o script de deploy
       - name: Run Square Cloud deployment
-        run: node global-scripts/src/square-deploy.mjs
+        run: |
+          cd global-scripts
+          echo "Current directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la
+          echo "Running deployment script..."
+          node src/square-deploy.mjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
-        working-directory: ./global-scripts 
