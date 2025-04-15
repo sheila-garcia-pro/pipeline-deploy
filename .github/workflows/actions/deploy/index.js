@@ -6,8 +6,8 @@ import * as core from '@actions/core';
 
 async function run() {
   try {
-    const token = core.getInput('square_api_key', { required: true });
-    const api_id = core.getInput('api_id_key', { required: true });
+    const token = process.env.TOKEN_SQUARE_CLOUD;
+    const api_id = process.env.API_ID;
     const zipFileName = core.getInput('zip_file_name', { required: true });
     const restartInput = core.getInput('restart_app');
     const restart = restartInput.toLowerCase() === 'true';
