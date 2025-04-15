@@ -40,7 +40,7 @@ jobs:
           cd ..
 
       - name: Run script deploy in squarecloud
-        uses: ./.github/workflows/actions/deploy
+        uses: sheila-garcia-pro/pipeline-deploy/.github/actions/deploy@main
         env:
           TOKEN_SQUARE_CLOUD: ${{ secrets.TOKEN_SQUARE_CLOUD }}
           API_ID: ${{ secrets.API_ID }}
