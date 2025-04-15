@@ -78,11 +78,7 @@ jobs:
 
       # 7. Executa o deploy
       - name: Run Square Cloud deployment
-        run: |
-          cd global-scripts
-          echo "Conteúdo do diretório:"
-          ls -la
-          node src/square-deploy.js
+        run: node src/square-deploy.js
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
           API_ID_KEY: ${{ secrets.API_ID_KEY }}
