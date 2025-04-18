@@ -99,12 +99,10 @@ jobs:
           echo "❌ ERRO: app.zip não encontrado em nenhum local"
           exit 1
           fi
-          echo "5. Verificando cópia..."
-          ls -la src/app.zip
-          echo "6. Verificando app.zip..."
+          echo "5. Verificando app.zip..."
           [ -f app.zip ] && echo "app.zip encontrado" || echo "ERRO: app.zip não encontrado"
           unzip -l app.zip || echo "Não foi possível ler app.zip"
-          echo "7. Executando deploy..."
+          echo "6. Executando deploy..."
           node src/square-deploy.cjs
         env:
           SQUARE_API_KEY: ${{ secrets.SQUARE_API_KEY }}
