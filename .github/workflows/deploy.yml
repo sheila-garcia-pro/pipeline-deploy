@@ -101,7 +101,6 @@ jobs:
           fi
           echo "5. Verificando app.zip..."
           [ -f app.zip ] && echo "app.zip encontrado" || echo "ERRO: app.zip não encontrado"
-          unzip -l app.zip || echo "Não foi possível ler app.zip"
           echo "6. Executando deploy..."
           node src/square-deploy.cjs
         env:
