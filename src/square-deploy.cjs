@@ -47,6 +47,9 @@ async function deploy() {
       throw new Error(`Arquivo app.zip não encontrado em ${filePath}`);
     }
 
+    const filesList = await app.files.list();
+    console.log(filesList);
+
     console.log('[7/7] Realizando upload...');
     const success = await app.commit(filePath, 'app.zip');
     if (!success) {
