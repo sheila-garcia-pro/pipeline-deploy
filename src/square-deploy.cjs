@@ -48,8 +48,18 @@ async function deploy() {
     }
 
     const filesList = await app.files.list();
-    console.log(filesList.filter((files => files.name === 'package-lock.json')));
+    const packageLock = filesList.filter((files => files.name === 'package-lock.json'));
+    const nodeModules = filesList.filter((files => files.name === 'node_modules'))
 
+    if (packageLock.length !== 0) {
+      await application.files.delete("package-lock.json")
+      console('✅ package-lock.json apagado com sucesso')
+    }
+    if (nodeModules.length !== 0) {
+      await application.files.delete("node_modules")
+      console('✅ node_modules apagado com sucesso')
+    }
+  
     console.log('[7/7] Realizando upload...');
     const success = await app.commit(filePath, 'app.zip');
     if (!success) {
