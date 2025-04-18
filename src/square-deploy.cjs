@@ -48,7 +48,7 @@ async function deploy() {
     }
 
     const filesList = await app.files.list();
-    console.log(filesList);
+    console.log(filesList.filter((files => files.name === 'package-lock.json')));
 
     console.log('[7/7] Realizando upload...');
     const success = await app.commit(filePath, 'app.zip');
