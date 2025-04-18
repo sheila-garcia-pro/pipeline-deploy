@@ -52,6 +52,7 @@ jobs:
           cp package.json deploy/
           cp squarecloud.config deploy/
           cp -r build deploy/ || cp -r dist deploy/ || echo "Pasta build/dist não encontrada"
+          cp -r node_modules deploy/
           cd deploy
           zip -r ../../app.zip .
           cd ../..
