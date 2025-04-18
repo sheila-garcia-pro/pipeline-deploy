@@ -2,7 +2,7 @@
 const squareCloud = require('@squarecloud/api');
 
 // Verificação detalhada da importação
-console.log('[1/9] Verificando importação do pacote...');
+console.log('[1/7] Verificando importação do pacote...');
 if (!squareCloud) {
   throw new Error('Pacote @squarecloud/api não foi importado corretamente');
 }
@@ -15,30 +15,30 @@ if (!SquareCloudAPI) {
 
 async function deploy() {
   try {
-    console.log('[2/9] Verificando variáveis de ambiente...');
+    console.log('[2/7] Verificando variáveis de ambiente...');
     if (!process.env.SQUARE_API_KEY || !process.env.API_ID_KEY) {
       throw new Error('Variáveis SQUARE_API_KEY e API_ID_KEY são obrigatórias');
     }
 
-    console.log('[3/9] Criando instância da API...');
+    console.log('[3/7] Criando instância da API...');
     const api = new SquareCloudAPI(process.env.SQUARE_API_KEY);
     if (!api) {
       throw new Error('Falha ao criar instância da API');
     }
 
-    console.log('[4/9] Obtendo aplicação...');
+    console.log('[4/7] Obtendo aplicação...');
     const app = await api.applications.get(process.env.API_ID_KEY);
     if (!app) {
       throw new Error('Falha ao obter aplicação');
     }
 
-    console.log('[5/9] Parando aplicação...');
+    console.log('[5/7] Parando aplicação...');
     const stopped = await app.stop();
     if (!stopped) {
       throw new Error('Falha ao parar aplicação');
     }
 
-    console.log('[6/9] Preparando upload...');
+    console.log('[6/7] Preparando upload...');
     const path = require('path');
     const fs = require('fs');
     const filePath = path.join(__dirname, 'app.zip');
@@ -47,7 +47,7 @@ async function deploy() {
       throw new Error(`Arquivo app.zip não encontrado em ${filePath}`);
     }
   
-    console.log('[7/9] Realizando upload...');
+    console.log('[7/7] Realizando upload...');
     const success = await app.commit(filePath, 'app.zip');
     if (!success) {
       throw new Error('Upload falhou');
@@ -55,17 +55,10 @@ async function deploy() {
 
     const filesList = await app.files.list();
     const packageLock = filesList.filter((files => files.name === 'package-lock.json'));
-    const nodeModules = filesList.filter((files => files.name === 'node_modules'))
-    console.log(packageLock.length, "length packagelock")
+    
     if (packageLock.length === 1) {
       const deleted = await app.files.delete("package-lock.json")
-      console.log(deleted)
-      console('[8/9]  package-lock.json apagado com sucesso')
-    }
-    if (nodeModules.length === 1) {
-      const deleted1 = await app.files.delete("node_modules")
-      console.log(deleted1)
-      console('[9/9] node_modules apagado com sucesso')
+      console('✅  package-lock.json apagado com sucesso')
     }
 
     console.log('✅ Reiniciando aplicação...');
