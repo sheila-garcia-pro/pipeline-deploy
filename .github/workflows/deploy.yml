@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04-large
+    runs-on: ubuntu-latest
     steps:
       # 1. Checkout do repositório CHAMADOR (não do global)
       - name: Checkout caller repository
