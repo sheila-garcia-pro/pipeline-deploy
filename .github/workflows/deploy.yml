@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-large
     steps:
       # 1. Checkout do repositório CHAMADOR (não do global)
       - name: Checkout caller repository
@@ -38,12 +38,17 @@ jobs:
       - name: Install dependencies
         run: npm install --no-package-lock
         working-directory: ./caller-repo
+        
+      - name: Clean cache
+        run: |
+          npm cache clean --force
+          rm -rf node_modules/.cache
 
       # 4. Build do projeto do chamador
       - name: Build project
         run: |
-          export FORK_TS_CHECKER_NO_TYPECHECK=1
-          export NODE_OPTIONS=--max-old-space-size=10240
+          export NODE_OPTIONS=--max-old-space-size=8192
+          export GENERATE_SOURCEMAP=false
           CI=false npm run build
         working-directory: ./caller-repo
 
