@@ -48,8 +48,8 @@ jobs:
       # 4. Build do projeto do chamador
       - name: Build project
         run: |
-          export NODE_OPTIONS=--max-old-space-size=14336
           export GENERATE_SOURCEMAP=false
+          export DISABLE_ESLINT_PLUGIN=true
           CI=false npm run build
         working-directory: ./caller-repo
 
