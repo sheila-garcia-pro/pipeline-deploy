@@ -41,7 +41,10 @@ jobs:
 
       # 4. Build do projeto do chamador
       - name: Build project
-        run: CI=false npm run build
+        run: |
+        export FORK_TS_CHECKER_NO_TYPECHECK=1
+        export NODE_OPTIONS=--max-old-space-size=6144
+        CI=false npm run build
         working-directory: ./caller-repo
 
       # 5. Cria ZIP com os arquivos do chamador
