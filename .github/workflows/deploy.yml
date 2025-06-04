@@ -43,7 +43,7 @@ jobs:
       - name: Build project
         run: |
           export FORK_TS_CHECKER_NO_TYPECHECK=1
-          export NODE_OPTIONS=--max-old-space-size=6144
+          export NODE_OPTIONS=--max-old-space-size=10240
           CI=false npm run build
         working-directory: ./caller-repo
 
