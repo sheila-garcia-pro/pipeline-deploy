@@ -42,7 +42,8 @@ jobs:
       - name: Clean cache
         run: |
           npm cache clean --force
-          rm -rf node_modules/.cache
+          rm -rf node_modules/.cache          
+        working-directory: ./caller-repo
 
       # 4. Build do projeto do chamador
       - name: Build project
