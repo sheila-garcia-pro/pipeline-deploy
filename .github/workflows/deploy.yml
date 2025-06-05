@@ -33,11 +33,6 @@ jobs:
       - name: Create dummy lock file
         run: echo "{}" > package-lock.json
         working-directory: ./caller-repo
-
-      # 3. Instala dependências do chamador
-      - name: Install dependencies
-        run: npm install --no-package-lock
-        working-directory: ./caller-repo
         
       - name: Clean cache
         run: |
@@ -45,10 +40,15 @@ jobs:
           rm -rf node_modules/.cache          
         working-directory: ./caller-repo
 
+      # 3. Instala dependências do chamador
+      - name: Install dependencies
+        run: npm install --no-package-lock
+        working-directory: ./caller-repo
+
       # 4. Build do projeto do chamador
       - name: Build project
         run: |
-          export NODE_OPTIONS=--max-old-space-size=14336
+          export NODE_OPTIONS=--max-old-space-size=16384
           export GENERATE_SOURCEMAP=false
           export DISABLE_ESLINT_PLUGIN=true
           CI=false npm run build
