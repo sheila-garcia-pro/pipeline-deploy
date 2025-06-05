@@ -44,6 +44,11 @@ jobs:
           npm cache clean --force
           rm -rf node_modules/.cache          
         working-directory: ./caller-repo
+
+      - name: Check memory
+        run: |
+          echo "Memória livre: $(($(free -m | awk '/^Mem:/{print $7}')/1024))GB"
+          echo "Memória total: $(($(free -m | awk '/^Mem:/{print $2}')/1024))GB"
         
       # 4. Build do projeto do chamador
       - name: Build project
