@@ -51,7 +51,7 @@ jobs:
           export NODE_OPTIONS=--max-old-space-size=16384
           export GENERATE_SOURCEMAP=false
           export DISABLE_ESLINT_PLUGIN=true
-          CI=false npm run build
+          CI=false NODE_ENV=production npm run build -- --max-old-space-size=16384
         working-directory: ./caller-repo
 
       # 5. Cria ZIP com os arquivos do chamador
