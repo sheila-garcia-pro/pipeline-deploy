@@ -53,20 +53,11 @@ jobs:
       # 4. Build do projeto do chamador
       - name:  Partial build (step 1)
         run: |
-          export NODE_OPTIONS=--max-old-space-size=16384
+          export NODE_OPTIONS="--max-old-space-size=16384 --no-experimental-fetch --optimize-for-size"
           export GENERATE_SOURCEMAP=false
           export DISABLE_ESLINT_PLUGIN=true
-          CI=false npm run build:partial-1
+          CI=false npm run build --no-cache --max-old-space-size=16384
         working-directory: ./caller-repo 
-        
-      # 4. Build do projeto do chamador
-      - name:  Partial build (step 2)
-        run: |
-          export NODE_OPTIONS=--max-old-space-size=16384
-          export GENERATE_SOURCEMAP=false
-          export DISABLE_ESLINT_PLUGIN=true
-          CI=false npm run build:partial-1
-        working-directory: ./caller-repo
 
       # 5. Cria ZIP com os arquivos do chamador
       - name: Prepare zip from caller
