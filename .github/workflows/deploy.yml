@@ -51,12 +51,21 @@ jobs:
           echo "Memória total: $(($(free -m | awk '/^Mem:/{print $2}')/1024))GB"
         
       # 4. Build do projeto do chamador
-      - name: Build project
+      - name:  Partial build (step 1)
         run: |
           export NODE_OPTIONS=--max-old-space-size=16384
           export GENERATE_SOURCEMAP=false
           export DISABLE_ESLINT_PLUGIN=true
-          CI=false NODE_ENV=production npm run build -- --max-old-space-size=16384
+          CI=false npm run build:partial-1
+        working-directory: ./caller-repo 
+        
+      # 4. Build do projeto do chamador
+      - name:  Partial build (step 2)
+        run: |
+          export NODE_OPTIONS=--max-old-space-size=16384
+          export GENERATE_SOURCEMAP=false
+          export DISABLE_ESLINT_PLUGIN=true
+          CI=false npm run build:partial-1
         working-directory: ./caller-repo
 
       # 5. Cria ZIP com os arquivos do chamador
