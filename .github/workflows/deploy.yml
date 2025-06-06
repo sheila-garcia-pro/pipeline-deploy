@@ -55,10 +55,12 @@ jobs:
         run: |
           export GENERATE_SOURCEMAP=false
           export DISABLE_ESLINT_PLUGIN=true
+          export FORK_TS_CHECKER=false
           CI=false npm run build
         env:
             GENERATE_SOURCEMAP: false
             DISABLE_ESLINT_PLUGIN: true
+            FORK_TS_CHECKER: false
         working-directory: ./caller-repo 
 
       # 5. Cria ZIP com os arquivos do chamador
