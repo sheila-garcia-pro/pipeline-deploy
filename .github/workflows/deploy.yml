@@ -58,10 +58,13 @@ jobs:
           export FORK_TS_CHECKER=false
           CI=false npm run build
         env:
-            GENERATE_SOURCEMAP: false
-            DISABLE_ESLINT_PLUGIN: true
-            FORK_TS_CHECKER: false
+            NODE_ENV: production
         working-directory: ./caller-repo 
+
+      - name: Analyze bundle
+        if: always()
+        run: |
+            npx source-map-explorer build/static/js/*.js || echo "Análise falhou"
 
       # 5. Cria ZIP com os arquivos do chamador
       - name: Prepare zip from caller
