@@ -59,7 +59,7 @@ jobs:
       - name: Analyze bundle
         if: always()
         run: |
-            npx source-map-explorer build/static/js/*.js || echo "Análise falhou"
+            npm source-map-explorer build/static/js/*.js || echo "Análise falhou"
 
       # 5. Cria ZIP com os arquivos do chamador
       - name: Prepare zip from caller
