@@ -46,21 +46,10 @@ jobs:
         working-directory: ./caller-repo
         
       # 4. Build do projeto do chamador
-      - name:  Partial build (step 1)
-        run: |
-          export GENERATE_SOURCEMAP=false
-          export DISABLE_ESLINT_PLUGIN=true
-          export FORK_TS_CHECKER=false
-          CI=false npm run build
-        env:
-            NODE_ENV: production
+      - name:  Build project
+        run: CI=false npm run build
         working-directory: ./caller-repo 
-
-      - name: Analyze bundle
-        if: always()
-        run: |
-            npm source-map-explorer build/static/js/*.js || echo "Análise falhou"
-
+        
       # 5. Cria ZIP com os arquivos do chamador
       - name: Prepare zip from caller
         run: |
