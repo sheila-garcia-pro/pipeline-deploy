@@ -53,15 +53,12 @@ async function deploy() {
       throw new Error('Upload falhou');
     }
     const filesList = await app.files.list();
-    console.log(filesList, 'teste thom')
     const packageLock = filesList.filter((files => files.name === 'package-lock.json'));
     const noduModules = filesList.filter((files => files.name === 'node_modules'));
     
     if (packageLock.length === 1) {
-      console.log("entrou aqui")
       const deleted = await app.files.delete("package-lock.json")
       if (deleted) {
-        console.log("deleted")
         console.log('✅  package-lock.json apagado com sucesso')
       }
     }
