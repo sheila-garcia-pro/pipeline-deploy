@@ -58,6 +58,7 @@ async function deploy() {
     const noduModules = filesList.filter((files => files.name === 'node_modules'));
     
     if (packageLock.length === 1) {
+      console.log("entrou aqui")
       const deleted = await app.files.delete("package-lock.json")
       if (deleted) {  
         console.log('✅  package-lock.json apagado com sucesso')
