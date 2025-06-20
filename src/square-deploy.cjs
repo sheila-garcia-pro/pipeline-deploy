@@ -52,8 +52,8 @@ async function deploy() {
     if (!success) {
       throw new Error('Upload falhou');
     }
-    console.log(success, 'teste thom')
     const filesList = await app.files.list();
+    console.log(filesList, 'teste thom')
     const packageLock = filesList.filter((files => files.name === 'package-lock.json'));
     const noduModules = filesList.filter((files => files.name === 'node_modules'));
     
