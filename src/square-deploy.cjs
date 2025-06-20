@@ -59,14 +59,14 @@ async function deploy() {
     
     if (packageLock.length === 1) {
       console.log("entrou aqui")
-      const deleted = await app.files.delete("package-lock.json")
+      const deleted = await app.files.delete("/package-lock.json")
       if (deleted) {
         console.log("deleted")
         console.log('✅  package-lock.json apagado com sucesso')
       }
     }
     if (noduModules.length === 1) {
-      const deleted_modules = await app.files.delete("node_modules")
+      const deleted_modules = await app.files.delete("/node_modules")
       if (deleted_modules) {
       console.log('✅  node_modules apagado com sucesso')
       }
