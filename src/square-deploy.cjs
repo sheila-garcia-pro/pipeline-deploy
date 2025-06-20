@@ -60,7 +60,8 @@ async function deploy() {
     if (packageLock.length === 1) {
       console.log("entrou aqui")
       const deleted = await app.files.delete("package-lock.json")
-      if (deleted) {  
+      if (deleted) {
+        console.log("deleted")
         console.log('✅  package-lock.json apagado com sucesso')
       }
     }
