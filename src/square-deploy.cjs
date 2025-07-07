@@ -32,7 +32,7 @@ async function deploy() {
       throw new Error('Falha ao obter aplicação');
     }
 
-    const status = await application.getStatus();
+    const status = await app.getStatus();
     console.log('[5/7] Parando aplicação...');
     console.log(status.running)
     const stopped = await app.stop();
