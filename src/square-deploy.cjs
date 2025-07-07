@@ -32,8 +32,9 @@ async function deploy() {
       throw new Error('Falha ao obter aplicação');
     }
 
+    const status = await application.getStatus();
     console.log('[5/7] Parando aplicação...');
-    console.log(app.status())
+    console.log(status.running)
     const stopped = await app.stop();
     if (!stopped) {
       throw new Error('Falha ao parar aplicação');
