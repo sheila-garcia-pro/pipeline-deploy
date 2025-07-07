@@ -34,10 +34,13 @@ async function deploy() {
 
     const status = await app.getStatus();
     console.log('[5/7] Parando aplicação...');
-    console.log(status.running)
+    if (status.running) {
     const stopped = await app.stop();
     if (!stopped) {
       throw new Error('Falha ao parar aplicação');
+    }
+    } else {
+      console.log("Aplicação já esta parada");
     }
 
     console.log('[6/7] Preparando upload...');
