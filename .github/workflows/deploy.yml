@@ -50,7 +50,14 @@ jobs:
           echo "O branch atual é: ${{ github.ref_name }}"
       # 4. Build do projeto do chamador
       - name:  Build project
-        run: ${{ github.ref_name == 'main' && CI=false npm run build || CI=false npm run build:dev }}
+        run: | # Verifica se o nome do branch é 'main'
+          if [ "${{ github.ref_name }}" == "main" ]; then
+              # Se for 'main', executa o build de Produção
+              CI=false npm run build
+          else
+              # Caso contrário (dev, feature, etc.), executa o build de Desenvolvimento
+              CI=false npm run build:dev
+          fi
         working-directory: ./caller-repo 
         
       # 5. Cria ZIP com os arquivos do chamador
