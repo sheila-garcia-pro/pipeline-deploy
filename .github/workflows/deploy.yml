@@ -44,7 +44,10 @@ jobs:
           npm cache clean --force
           rm -rf node_modules/.cache          
         working-directory: ./caller-repo
-        
+
+      - name: Imprimir o Nome do Branch
+        run: |
+          echo "O branch atual é: ${{ github.ref_name }}"
       # 4. Build do projeto do chamador
       - name:  Build project
         run: CI=false npm run build
