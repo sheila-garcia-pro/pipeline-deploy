@@ -66,7 +66,6 @@ jobs:
           cd caller-repo
           mkdir deploy
           cp package.json deploy/
-          cp squarecloud.config deploy/
           cp -r build deploy/ || cp -r dist deploy/ || echo "Pasta build/dist não encontrada"
           cd deploy
           zip -r ../../app.zip .
